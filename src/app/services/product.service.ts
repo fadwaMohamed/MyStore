@@ -16,9 +16,13 @@ export class ProductService {
     return this.http.get<Product[]>(this.dataUrl);
   }
 
-  getProductById(id: number): Observable<Product | undefined> {
-    return this.http
-      .get<Product[]>(this.dataUrl)
-      .pipe(map((products) => products.find((p) => p.id == id)));
+  getProductById(id: number): Observable<Product | null> {
+    return this.http.get<Product[]>(this.dataUrl).pipe(
+      map((products) => {
+        let p = products.find((p) => p.id == id);
+        if (p) return p;
+        return null;
+      })
+    );
   }
 }
