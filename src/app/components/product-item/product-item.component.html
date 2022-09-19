@@ -8,10 +8,10 @@
   <p>{{ product.price | currency }}</p>
   <select class="form-select select-input" [(ngModel)]="quantity">
     <option
-      *ngFor="let item of [].constructor(10); let n = index"
-      [value]="n + 1"
+      *ngFor="let item of [].constructor(11); let n = index"
+      [ngValue]="n"
     >
-      {{ n + 1 }}
+      {{ n }}
     </option>
   </select>
   <button class="btn btn-primary" (click)="addToCart()">Add to cart</button>

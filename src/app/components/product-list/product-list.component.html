@@ -1,5 +1,8 @@
 <div class="product-index m-auto mb-3">
   <div class="product-container" *ngFor="let product of products">
-    <app-product-item [product]="product"></app-product-item>
+    <app-product-item
+      [product]="product"
+      [quantity]="cartSer.getProductQuantity(product.id)"
+    ></app-product-item>
   </div>
 </div>
