@@ -1,1 +1,5 @@
-<p>product-list works!</p>
+<div class="product-index m-auto mb-3">
+  <div class="product-container" *ngFor="let product of products">
+    <app-product-item [product]="product"></app-product-item>
+  </div>
+</div>
