@@ -22,12 +22,14 @@ img {
 }
 
 .number-input {
+  margin-left: 10px;
   width: 80px;
   text-align: center;
 }
 
 .cart-container {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
   margin-top: 64px;
@@ -35,11 +37,15 @@ img {
 
 .cart-panel {
   margin-left: 50px;
-  margin-right: 50px;
+  min-width: 280px;
 }
 
 .empty-cart-message {
   display: flex;
   justify-content: center;
   margin-top: 64px;
+}
+
+.ng-invalid.ng-touched {
+  border-color: #dc3545;
 }

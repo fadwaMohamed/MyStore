@@ -35,7 +35,7 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify({ items: cartItems }));
   }
 
-  getProductQuantity(productId: number) {
+  getProductQuantity(productId: number): number {
     return this.getCart().productQuantity(productId);
   }
 

@@ -1,1 +1,105 @@
-<p>cart works!</p>
+<div class="cart-container">
+  <div>
+    <ng-container *ngFor="let item of cart">
+      <div class="cart-item" *ngIf="item.quantity">
+        <img [src]="item.product.url" />
+        <div class="cart-item-details">
+          <h4>{{ item.product.name }}</h4>
+          <p>{{ item.product.price | currency }}</p>
+          <div>
+            <label>Amount:</label>
+            <input
+              type="number"
+              class="number-input"
+              [(ngModel)]="item.quantity"
+              (change)="changeAmount(item.product, item.quantity)"
+            />
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <h4>Total: {{ totalPrice() | currency }}</h4>
+  </div>
+
+  <div class="cart-panel">
+    <form class="form-margin" #form="ngForm" (ngSubmit)="checkOut(form.value)">
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full name</label>
+        <input
+          required
+          minlength="3"
+          ngModel
+          name="fullName"
+          #fullName="ngModel"
+          type="text"
+          class="form-control"
+          id="fullName"
+          placeholder="full name"
+        />
+        <span class="text-danger" *ngIf="fullName.touched && !fullName.valid">
+          <span *ngIf="fullName.errors?.['required']">
+            Full name is required
+          </span>
+          <span *ngIf="fullName.errors?.['minlength']">
+            Minimum 3 characters
+          </span>
+        </span>
+      </div>
+
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <input
+          required
+          minlength="6"
+          ngModel
+          name="address"
+          #address="ngModel"
+          type="text"
+          class="form-control"
+          id="address"
+          placeholder="address"
+        />
+        <span class="text-danger" *ngIf="address.touched && !address.valid">
+          <span *ngIf="address.errors?.['required']">
+            Address is required
+          </span>
+          <span *ngIf="address.errors?.['minlength']">
+            Minimum 6 characters
+          </span>
+        </span>
+      </div>
+
+      <div class="mb-3">
+        <label for="creditCardNumber" class="form-label"
+          >Credit card number</label
+        >
+        <input
+          required
+          pattern="^[0-9]{16}$"
+          ngModel
+          name="creditCardNumber"
+          #creditCardNumber="ngModel"
+          type="text"
+          class="form-control"
+          id="creditCardNumber"
+          placeholder="xxxxxxxxxxxxxxxx"
+        />
+        <span
+          class="text-danger"
+          *ngIf="creditCardNumber.touched && !creditCardNumber.valid"
+        >
+          <span *ngIf="creditCardNumber.errors?.['required']">
+            Credit card number is required
+          </span>
+          <span *ngIf="creditCardNumber.errors?.['pattern']">
+            16-digit number
+          </span>
+        </span>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
