@@ -25,6 +25,8 @@ export class CartComponent implements OnInit {
   }
 
   changeAmount(cartItem: CartItem) {
+    if (cartItem.quantity == null) return;
+
     this.cartSer.editCart(cartItem).subscribe();
   }
 

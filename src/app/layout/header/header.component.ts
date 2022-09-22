@@ -9,7 +9,11 @@ import { CartService } from './../../services/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  cart!: Cart;
+
   constructor(private cartSer: CartService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cartSer.getCart().subscribe((data) => (this.cart = new Cart(data)));
+  }
 }
