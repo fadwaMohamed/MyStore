@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Cart } from 'src/app/models/cart';
 
 import { CartItem } from './../../models/cart';
-import { Product } from './../../models/product';
 import { CartService } from './../../services/cart.service';
 
 @Component({
@@ -11,28 +11,31 @@ import { CartService } from './../../services/cart.service';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  cart: CartItem[] = [];
+  cart!: Cart;
+  loading: boolean = true;
 
   constructor(private cartSer: CartService, private router: Router) {}
 
   ngOnInit(): void {
-    this.cart = this.cartSer.getCart().items;
+    // get cart items
+    this.cartSer.getCart().subscribe((data) => {
+      this.cart = new Cart(data);
+      this.loading = false;
+    });
   }
 
-  changeAmount(product: Product, quantity: number) {
-    this.cartSer.addToCart(product, quantity);
-  }
-
-  totalPrice(): number {
-    return this.cartSer.getCart().totalCartPrice;
+  changeAmount(cartItem: CartItem) {
+    this.cartSer.editCart(cartItem).subscribe();
   }
 
   checkOut(formValue: any) {
+    // navigate to confirmation page
     this.router.navigate([
       'confirmation',
       formValue.fullName,
-      this.totalPrice(),
+      this.cart.totalCartPrice,
     ]);
-    this.cartSer.clearCart();
+    // remove cart items
+    this.cartSer.clearCart(this.cart);
   }
 }

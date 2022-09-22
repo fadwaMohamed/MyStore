@@ -1,6 +1,6 @@
-<div class="cart-container">
+<div class="cart-container" *ngIf="cart?.totalCartPrice; else empty">
   <div>
-    <ng-container *ngFor="let item of cart">
+    <ng-container *ngFor="let item of cart.items">
       <div class="cart-item" *ngIf="item.quantity">
         <img [src]="item.product.url" />
         <div class="cart-item-details">
@@ -12,13 +12,13 @@
               type="number"
               class="number-input"
               [(ngModel)]="item.quantity"
-              (change)="changeAmount(item.product, item.quantity)"
+              (ngModelChange)="changeAmount(item)"
             />
           </div>
         </div>
       </div>
     </ng-container>
-    <h4>Total: {{ totalPrice() | currency }}</h4>
+    <h4>Total: {{ cart.totalCartPrice | currency }}</h4>
   </div>
 
   <div class="cart-panel">
@@ -103,3 +103,15 @@
     </form>
   </div>
 </div>
+
+<ng-template #empty>
+  <div class="empty-cart-message" *ngIf="!loading">
+    <div class="text-center">
+      <img src="assets/images/empty-cart.png" />
+      <h3>Empty Cart!</h3>
+      <button class="btn btn-primary mt-2" routerLink="/products">
+        Back to product list
+      </button>
+    </div>
+  </div>
+</ng-template>

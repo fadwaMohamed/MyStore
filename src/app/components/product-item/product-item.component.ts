@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CartItem } from 'src/app/models/cart';
 
 import { Product } from './../../models/product';
 import { CartService } from './../../services/cart.service';
@@ -10,13 +11,23 @@ import { CartService } from './../../services/cart.service';
 })
 export class ProductItemComponent implements OnInit {
   @Input('product') product!: Product;
-  @Input('quantity') quantity: number = 0;
+  quantity: number = 0;
+  idInCart: number = -1;
 
   constructor(private cartSer: CartService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cartSer.getProductInCart(this.product).subscribe((item) => {
+      if (item) {
+        this.quantity = item.quantity;
+        this.idInCart = item.id;
+      }
+    });
+  }
 
   addToCart() {
-    this.cartSer.addToCart(this.product, this.quantity);
+    this.cartSer
+      .editCart(new CartItem(this.idInCart, this.product, this.quantity))
+      .subscribe();
   }
 }

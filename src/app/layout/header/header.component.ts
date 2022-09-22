@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Cart } from './../../models/cart';
 import { CartService } from './../../services/cart.service';
 
 @Component({
@@ -8,15 +9,7 @@ import { CartService } from './../../services/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  totalCount: number = 0;
-
   constructor(private cartSer: CartService) {}
 
-  ngOnInit(): void {
-    this.changeCount();
-  }
-
-  changeCount() {
-    this.totalCount = this.cartSer.getCart().totalCount;
-  }
+  ngOnInit(): void {}
 }

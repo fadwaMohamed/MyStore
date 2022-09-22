@@ -17,7 +17,10 @@ export class Cart {
   }
 }
 
-export interface CartItem {
-  product: Product;
-  quantity: number;
+export class CartItem {
+  constructor(
+    public id: number,
+    public product: Product,
+    public quantity: number
+  ) {}
 }

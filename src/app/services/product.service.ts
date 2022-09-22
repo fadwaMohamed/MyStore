@@ -8,7 +8,8 @@ import { Product } from './../models/product';
   providedIn: 'root',
 })
 export class ProductService {
-  dataUrl = 'assets/data.json';
+  //dataUrl = 'assets/data.json';
+  dataUrl = 'http://localhost:3000/product';
 
   constructor(private http: HttpClient) {}
 
@@ -16,7 +17,7 @@ export class ProductService {
     return this.http.get<Product[]>(this.dataUrl);
   }
 
-  getProductById(id: number): Observable<Product | null> {
+  /* getProductById(id: number): Observable<Product | null> {
     return this.http.get<Product[]>(this.dataUrl).pipe(
       map((products) => {
         let p = products.find((p) => p.id == id);
@@ -24,5 +25,9 @@ export class ProductService {
         return null;
       })
     );
+  } */
+
+  getProductById(id: number): Observable<Product | null> {
+    return this.http.get<Product>(`${this.dataUrl}/${id}`);
   }
 }

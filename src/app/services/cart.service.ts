@@ -1,45 +1,59 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { Cart } from 'src/app/models/cart';
 
-import { Cart, CartItem } from './../models/cart';
+import { CartItem } from './../models/cart';
 import { Product } from './../models/product';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  constructor() {}
+  private url: string = 'http://localhost:3000/cartItems';
 
-  getCart(): Cart {
-    let cart = localStorage.getItem('cart');
-    return new Cart(cart ? JSON.parse(cart).items : []);
+  constructor(private http: HttpClient) {}
+
+  getCart(): Observable<CartItem[]> {
+    return this.http.get<CartItem[]>(this.url);
   }
 
-  private getCartItemIndex(productId: number, cartItems: CartItem[]) {
-    return cartItems.findIndex((item) => item.product.id == productId);
+  // is product exist in cart
+  getProductInCart(product: Product): Observable<CartItem | null> {
+    return this.getCart().pipe(
+      map((cartItems) => {
+        let cartItem = cartItems.find((item) => item.product.id == product.id);
+        if (cartItem) return cartItem;
+        return null;
+      })
+    );
   }
 
-  addToCart(product: Product, quantity: number) {
-    let cartItems = this.getCart().items;
-    let existIndex = this.getCartItemIndex(product.id, cartItems);
-
-    if (existIndex >= 0) {
-      // remove product
-      if (quantity == 0) cartItems.splice(existIndex, 1);
-      // update quantity
-      else cartItems[existIndex].quantity = quantity;
-    }
-    // add product
-    else if (quantity != 0)
-      cartItems.push({ product: product, quantity: quantity });
-
-    localStorage.setItem('cart', JSON.stringify({ items: cartItems }));
+  editCart(cartItem: CartItem): Observable<CartItem | object> {
+    // add new product
+    if (cartItem.id == -1) return this.addToCart(cartItem);
+    // remove product
+    else if (cartItem.quantity == 0) return this.removeFromCart(cartItem.id);
+    // update quantity of existing product
+    else return this.updateQuantity(cartItem);
   }
 
-  getProductQuantity(productId: number): number {
-    return this.getCart().productQuantity(productId);
+  private addToCart(cartItem: CartItem): Observable<CartItem> {
+    return this.http.post<CartItem>(this.url, {
+      product: cartItem.product,
+      quantity: cartItem.quantity,
+    });
   }
 
-  clearCart() {
-    localStorage.setItem('cart', JSON.stringify({ items: [] }));
+  private removeFromCart(id: number): Observable<object> {
+    return this.http.delete(`${this.url}/${id}`);
+  }
+
+  private updateQuantity(cartItem: CartItem): Observable<object> {
+    return this.http.put(`${this.url}/${cartItem.id}`, cartItem);
+  }
+
+  clearCart(cart: Cart) {
+    cart.items.forEach((item) => this.removeFromCart(item.id).subscribe());
   }
 }
