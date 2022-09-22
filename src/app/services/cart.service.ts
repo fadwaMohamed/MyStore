@@ -30,6 +30,7 @@ export class CartService {
   }
 
   editCart(cartItem: CartItem): Observable<any> {
+    console.log(cartItem)
     // add new product
     if (cartItem.id == -1) return this.addToCart(cartItem);
     // remove product

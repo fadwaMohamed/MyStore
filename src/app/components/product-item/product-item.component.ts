@@ -28,6 +28,9 @@ export class ProductItemComponent implements OnInit {
   addToCart() {
     this.cartSer
       .editCart(new CartItem(this.idInCart, this.product, this.quantity))
-      .subscribe();
+      .subscribe((res) => {
+        if (this.quantity != 0) this.idInCart = res.id;
+        else this.idInCart = -1;
+      });
   }
 }

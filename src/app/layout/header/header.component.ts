@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Cart } from './../../models/cart';
+//import { Cart } from './../../models/cart';
 import { CartService } from './../../services/cart.service';
 
 @Component({
@@ -9,11 +9,12 @@ import { CartService } from './../../services/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  cart!: Cart;
+  //cart!: Cart;
 
-  constructor(private cartSer: CartService) {}
+  constructor() {}
+  //constructor(private cartSer: CartService) {}
 
   ngOnInit(): void {
-    this.cartSer.getCart().subscribe((data) => (this.cart = new Cart(data)));
+    //this.cartSer.getCart().subscribe((data) => (this.cart = new Cart(data)));
   }
 }
